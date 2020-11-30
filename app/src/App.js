@@ -1,11 +1,7 @@
-import { Button } from "antd";
+import React from "react";
 
-function App() {
-  return (
-    <div>
-      <Button type={"primary"}>测试antd</Button>
-    </div>
-  );
-}
+const App = (props) => {
+  return <div>{props.children}</div>;
+};
 
 export default App;

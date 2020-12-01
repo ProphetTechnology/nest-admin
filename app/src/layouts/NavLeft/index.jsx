@@ -1,29 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import { Menu } from "antd";
-import { NavMenu } from "../../common/config";
+import { NavMenu } from "@common/config";
 
 import "./index.less";
 
 const SubMenu = Menu.SubMenu;
 const MenuItem = Menu.Item;
 
-class NavLeft extends Component {
-  componentWillMount() {
-    const menuTree = this.renderMenu(NavMenu);
-
-    this.setState({
-      menuTree,
-    });
-  }
-
+const NavLeft = () => {
   // 菜单渲染
-  renderMenu = (data) => {
+  const renderMenu = (data) => {
     return data.map((item) => {
       if (item.children) {
         return (
           <SubMenu title={item.title} key={item.key}>
-            {this.renderMenu(item.children)}
+            {renderMenu(item.children)}
           </SubMenu>
         );
       }
@@ -35,17 +27,17 @@ class NavLeft extends Component {
     });
   };
 
-  render() {
-    return (
-      <div>
-        <div className={"logo"}>
-          <img src={"/images/logo.png"} alt={"logo图片"} />
-          <h1>Nest Admin</h1>
-        </div>
-        <Menu theme={"dark"}>{this.state.menuTree}</Menu>
+  return (
+    <div>
+      <div className={"logo"}>
+        <img src={"/images/logo.png"} alt={"logo图片"} />
+        <h1>Nest Admin</h1>
       </div>
-    );
-  }
-}
+      <Menu theme={"dark"} mode={"inline"}>
+        {renderMenu(NavMenu)}
+      </Menu>
+    </div>
+  );
+};
 
 export default NavLeft;

@@ -4,9 +4,4 @@ import AppRouter from "./router";
 
 import "./index.less";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <AppRouter />
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+ReactDOM.render(<AppRouter />, document.getElementById("root"));

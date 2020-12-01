@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { Row, Col } from "antd";
-import { request } from "../../common/request";
-import { baidu_ak } from "../../common/config";
+import dayJS from "dayjs";
+import _ from "lodash";
+import { request } from "@common/request";
+import { appID, appSecret } from "@common/config";
 
 import "./index.less";
 
@@ -13,7 +15,7 @@ class Header extends Component {
       userName: "Diviner_Sun",
     });
     setInterval(() => {
-      const sysTime = "2020-12-01";
+      const sysTime = dayJS().format("YYYY-MM-DD HH:mm:ss");
       this.setState({
         sysTime,
       });
@@ -22,32 +24,23 @@ class Header extends Component {
   }
 
   getWeatherInfo() {
-    const city = "北京";
-    const url =
-      "/telematics/v3/weather?location=" +
-      encodeURIComponent(city) +
-      "&output=json&ak=" +
-      baidu_ak;
+    const weatherImgBaseUrl =
+      "https://www.mingtai18.com/tianqiapi/skin/pitaya/";
+    const url = `/api?version=v9&appid=${appID}&appsecret=${appSecret}&vue=1`;
     request({
-      baseURL: "https://api.map.baidu.com",
-      url: url,
-    })
-      .then((response) => {
-        if (response.status === "success") {
-          let data = response.results[0].weather_data[0];
-          // console.log(data);
-          this.setState({
-            week: data.date.slice(0, 3),
-            weather: data.weather,
-            wind: data.wind,
-            wendu: data.temperature,
-            weatherImg: data.dayPictureUrl,
-          });
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
+      baseURL: "https://v0.yiketianqi.com",
+      url,
+    }).then((res) => {
+      const data = _.get(res, "data[0]");
+      this.setState({
+        week: _.get(data, "week"),
+        weather: _.get(data, "wea"),
+        air: _.get(data, "air_level"),
+        airTips: _.get(data, "air_tips"),
+        wendu: `${_.get(data, "tem")} ℃`,
+        weatherImg: `${weatherImgBaseUrl}${_.get(data, "wea_img")}.png`,
       });
+    });
   }
 
   render() {
@@ -56,20 +49,25 @@ class Header extends Component {
         <Row className={"header-top"}>
           <Col span={24}>
             <span>欢迎， {this.state.userName}!</span>
-            <a href={"/111"}>退 出</a>
+            <a href={"/login"}>退 出</a>
           </Col>
         </Row>
         <Row className={"top-info"}>
-          <Col span={4} className={"title"}>
+          <Col span={2} className={"title"}>
             <span>首页</span>
           </Col>
-          <Col span={20} className={"weather"}>
+          <Col span={22} className={"weather"}>
             <span className={"weather-date"}>{this.state.sysTime}</span>
             <span className={"weather-detail"}>
               <span className={"weather-week"}>{this.state.week}</span>
               <img src={this.state.weatherImg} alt={"天气图片"} />
               <span className={"weather-weather"}>{this.state.weather}</span>
-              <span className={"weather-wind"}>{this.state.wind}</span>
+              <span className={"weather-wind"}>
+                空气质量：
+                <span className="air" title={this.state.airTips}>
+                  {this.state.air}
+                </span>
+              </span>
               <span className={"weather-wendu"}>温度： {this.state.wendu}</span>
             </span>
           </Col>

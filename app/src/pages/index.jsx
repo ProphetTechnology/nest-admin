@@ -1,8 +1,8 @@
 import React from "react";
 import { Row, Col } from "antd";
-import Header from "../layouts/Header";
-import Footer from "../layouts/Footer";
-import NavLeft from "../layouts/NavLeft";
+import Header from "@layouts/Header";
+import Footer from "@layouts/Footer";
+import NavLeft from "@layouts/NavLeft";
 
 import "./index.less";
 
@@ -17,8 +17,7 @@ const Admin = (props) => {
           <Header />
           <Row className={"content"}>
             {/* <Home /> */}
-            {/* {props.children} */}
-            欢迎使用Nest-Admin
+            {props.children}
           </Row>
           <Footer />
         </Col>

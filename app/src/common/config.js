@@ -1,4 +1,5 @@
-export const baidu_ak = "70DfE3yIm5MpLQGG8ANLp7Aohnc2fUZ7";
+export const appID = "56539961";
+export const appSecret = "lb7i7ILL";
 
 export const NavMenu = [
   {
